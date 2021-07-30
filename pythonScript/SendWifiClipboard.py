@@ -6,7 +6,6 @@ import os
 import re
 import socket
 import threading
-from tkinter import Tk
 import threading
 import time
 import sys
@@ -26,12 +25,21 @@ if len(sys.argv) > 1:
     except:
         print("Bad argument")
 
-try:  # tkinter comes with python on Windows by default
+try:
+    import pyperclip  # default to faster, but required install
+
+    msg = pyperclip.paste()
+
+    if not msg:
+        raise ValueError
+except ModuleNotFoundError:
+    # tkinter comes with python on Windows by default, and is common
+    from tkinter import Tk
+
     msg = Tk().clipboard_get()  # tkinter has clipboard option builtin
 except:
-    print("Clipboard empty")
+    print("Failed to read from Clipboard")
     exit(0)
-
 
 Done = 0
 threads = []
