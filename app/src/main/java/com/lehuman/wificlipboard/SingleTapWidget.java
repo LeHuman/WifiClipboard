@@ -186,7 +186,7 @@ public class SingleTapWidget extends AppWidgetProvider {
                 status = 1;
             } else {
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("WifiCopy", message);
+                ClipData clip = ClipData.newPlainText("Wi-fi Copy", message);
                 clipboard.setPrimaryClip(clip);
                 status = 0;
             }
