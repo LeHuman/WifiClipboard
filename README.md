@@ -26,11 +26,9 @@ Tap the icon twice to cancel.
 
 The arp command is required for the python script / executable.
 
-I believe Windows comes with this command.
+I believe Windows and Mac come with this command.
 
 Linux needs [net-tools](https://wiki.linuxfoundation.org/networking/net-tools) to be installed, or at least just the arp command.
-
-I am unsure about Mac.
 
 If using the python script, [python3](https://www.python.org/) is needed along with the module [pyperclip](https://pypi.org/project/pyperclip/) or [tkinter](https://docs.python.org/3/library/tkinter.html)
 
