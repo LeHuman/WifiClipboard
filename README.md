@@ -1,5 +1,7 @@
 # Wi-fi Clipboard
 
+![App-Icon](https://github.com/LeHuman/WifiClipboard/raw/main/pythonScript/images/app.png)
+
 ## What is this
 
 This very simple android app creates a widget on the homescreen which, when enabled, allows it to receive a string over a TCP socket to then copy it onto the clipboard.
