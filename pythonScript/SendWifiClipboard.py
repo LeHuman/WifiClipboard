@@ -39,7 +39,7 @@ except ModuleNotFoundError:
     msg = Tk().clipboard_get()  # tkinter has clipboard option builtin
 except:
     print("Failed to read from Clipboard")
-    exit(0)
+    sys.exit(0)
 
 Done = 0
 threads = []
