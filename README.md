@@ -22,6 +22,22 @@ Any received text will then be place on your device's clipboard.
 
 Tap the icon twice to cancel.
 
+## Requirements
+
+The arp command is required for the python script / executable.
+
+I believe Windows comes with this command.
+
+Linux needs [net-tools](https://wiki.linuxfoundation.org/networking/net-tools) to be installed, or at least just the arp command.
+
+I am unsure about Mac.
+
+If using the python script, [python3](https://www.python.org/) is needed along with the module [pyperclip](https://pypi.org/project/pyperclip/) or [tkinter](https://docs.python.org/3/library/tkinter.html)
+
+Android device with SDK 21+.
+
+Local network for everything to connect through.
+
 ## Notes
 
 When the widget is enabled, the device sending the string only really needs to connect to the address listed in the app and send a string over the appropriate TCP port.
