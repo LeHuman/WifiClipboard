@@ -50,7 +50,7 @@ public class SingleTapWidget extends AppWidgetProvider {
     }
 
     private static void clearStandbyQueue() {
-        if (BuildConfig.VERSION_CODE < 28)
+        if (Build.VERSION.SDK_INT < 28)
             delayedIntent.removeCallbacksAndMessages(null);
         else
             delayedIntent.removeCallbacksAndMessages(1);
