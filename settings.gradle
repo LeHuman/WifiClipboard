@@ -1,0 +1,2 @@
+rootProject.name = "WifiClipboard"
+include ':app'

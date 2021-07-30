@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">WifiClipboard</string>
+    <string name="connection_status">Connection Status</string>
+    <string name="main_icon">Main Icon</string>
+    <string name="server_address">Server Address</string>
+    <string name="app_usage">\nPlace the widget associated with this app on your homescreen.\nNext, use the included python script to send data from a locally connected device to this app.\nAny received text will then be place on your clipboard.\nTap the icon twice to cancel.\n\nWhen enabled, the device sending the string only really needs to connect to the address listed above and send a string over TCP.</string>
+    <string name="App_Title">WifiClipboard</string>
+    <string name="usage">Usage</string>
+    <string name="settings">Settings</string>
+    <string name="timeout_ms">Timeout (ms)</string>
+    <string name="port_number">Port Number</string>
+    <string name="reset">Reset</string>
+    <string name="update">Update</string>
+    <string name="enable_toasts">Enable toast notifications</string>
+    <string name="port">Port</string>
+    <string name="app_icon">App Icon</string>
+</resources>
