@@ -62,7 +62,10 @@ public class MainActivity extends Activity {
         Context context = view.getContext();
 
         try {
-            Settings.setPORT(context, Integer.parseInt(port));
+            int _port = Integer.parseInt(port);
+            if (_port > 65535)
+                throw new NumberFormatException("Beyond valid port range");
+            Settings.setPORT(context, _port);
             Settings.setTIMEOUT(context, Integer.parseInt(timeout));
             Settings.setTOAST(context, toasts);
         } catch (NumberFormatException e) {
