@@ -73,7 +73,7 @@ devices = re.findall("^\\W+([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+).*$", devices, re.
 for device in devices:
     thread = threading.Thread(target=sendMsg, args=(device,))
     threads.append(thread)
-    
+
 for thread in threads:
     thread.start()
 
