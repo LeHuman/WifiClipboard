@@ -33,19 +33,23 @@ except:
     exit(0)
 
 
+Done = 0
+threads = []
+
 # Attempt to connect to the give IP
 def sendMsg(HOST_IP):
+    global Done
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.settimeout(1)  # at this point, server should be on already
         client.connect((HOST_IP, PORT))
         response = client.recv(2048).decode(FORMAT)
-        # We expect this exact response, other wise this connection may have been coincidence
+        # We expect this exact response, otherwise this connection may have been a coincidence
         if response == "Wi-fi Clipboard Connected":
             print("Sent", HOST_IP + ":" + str(PORT))
             client.send(str(msg if msg else input("Give input:")).encode(FORMAT))
             client.close()
-            exit(0)
+            Done = len(threads)
         else:
             client.close()
     except ConnectionRefusedError:
@@ -54,6 +58,7 @@ def sendMsg(HOST_IP):
         pass
     except OSError:
         pass
+    Done += 1
 
 
 devices = ""
@@ -66,4 +71,11 @@ devices = re.findall("^\\W+([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+).*$", devices, re.
 
 # Attempt to connect to every avaliable host using the specific port
 for device in devices:
-    threading.Thread(target=sendMsg, args=(device,)).start()
+    thread = threading.Thread(target=sendMsg, args=(device,))
+    threads.append(thread)
+    
+for thread in threads:
+    thread.start()
+
+while Done < len(threads):
+    pass
