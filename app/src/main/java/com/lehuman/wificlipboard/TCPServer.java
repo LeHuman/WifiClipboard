@@ -17,7 +17,7 @@ public class TCPServer {
     int job = 0;
     boolean done = true;
     volatile String response;
-    String message = "Connected";
+    String message = "Wi-fi Clipboard Connected";
     Thread messenger;
     TCPListener listener;
     ServerSocket serverSocket;
