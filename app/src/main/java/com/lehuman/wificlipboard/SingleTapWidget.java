@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -49,20 +50,32 @@ public class SingleTapWidget extends AppWidgetProvider {
     }
 
     private static void clearStandbyQueue() {
-        delayedIntent.removeCallbacksAndMessages(1);
+        if (BuildConfig.VERSION_CODE < 28)
+            delayedIntent.removeCallbacksAndMessages(null);
+        else
+            delayedIntent.removeCallbacksAndMessages(1);
     }
 
     private static void queueStandby(Context context) {
         clearStandbyQueue();
-        delayedIntent.postDelayed(() -> {
-            Intent intent = new Intent(context, SingleTapWidget.class);
-            intent.putExtra("STATE", IconState.STANDBY);
-            intent.setAction(TCP_STATUS);
-            context.sendBroadcast(intent);
-        }, 1, 1500);
+        if (Build.VERSION.SDK_INT < 28) {
+            delayedIntent.postDelayed(() -> {
+                Intent intent = new Intent(context, SingleTapWidget.class);
+                intent.putExtra("STATE", IconState.STANDBY);
+                intent.setAction(TCP_STATUS);
+                context.sendBroadcast(intent);
+            }, 1500);
+        } else {
+            delayedIntent.postDelayed(() -> {
+                Intent intent = new Intent(context, SingleTapWidget.class);
+                intent.putExtra("STATE", IconState.STANDBY);
+                intent.setAction(TCP_STATUS);
+                context.sendBroadcast(intent);
+            }, 1, 1500);
+        }
     }
 
-    private static void blink(Context context, IconState active, IconState blinked) { // TODO: not this
+    private static void blink(Context context, IconState active, IconState blinked) { // TODO: better way to blink, then remove SDK conditional
         delayedIntent.removeCallbacksAndMessages(null);
         setIconState(context, blinked);
         delayedIntent.postDelayed(() -> {
@@ -70,19 +83,19 @@ public class SingleTapWidget extends AppWidgetProvider {
             intent.putExtra("STATE", active);
             intent.setAction(TCP_STATUS);
             context.sendBroadcast(intent);
-        },  100);
+        }, 100);
         delayedIntent.postDelayed(() -> {
             Intent intent = new Intent(context, SingleTapWidget.class);
             intent.putExtra("STATE", blinked);
             intent.setAction(TCP_STATUS);
             context.sendBroadcast(intent);
-        },  200);
+        }, 200);
         delayedIntent.postDelayed(() -> {
             Intent intent = new Intent(context, SingleTapWidget.class);
             intent.putExtra("STATE", active);
             intent.setAction(TCP_STATUS);
             context.sendBroadcast(intent);
-        },  300);
+        }, 300);
     }
 
     private static void updateWidgets(Context context) {

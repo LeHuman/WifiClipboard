@@ -185,16 +185,16 @@
             android:layout_height="15dp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickUpdate"
             android:text="@string/update"
             android:textColor="?android:attr/textColorSecondary" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/resetBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onReset"
             android:text="@string/reset"
             android:textColor="?android:attr/textColorSecondary"
             app:backgroundTint="@color/material_on_surface_disabled" />

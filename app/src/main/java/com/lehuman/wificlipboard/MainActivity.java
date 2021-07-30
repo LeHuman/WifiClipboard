@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Locale;
@@ -16,6 +17,7 @@ public class MainActivity extends Activity {
     TextView ServerAddress;
     EditText portNumberBox, timeoutNumberBox;
     SwitchMaterial toastSwitch;
+    MaterialButton updateBtn, resetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,11 @@ public class MainActivity extends Activity {
         timeoutNumberBox = findViewById(R.id.timeoutNumberBox);
         toastSwitch = findViewById(R.id.toastSwitch);
 
+        updateBtn = findViewById(R.id.updateBtn);
+        updateBtn.setOnClickListener(this::onClickUpdate);
+        resetBtn = findViewById(R.id.resetBtn);
+        resetBtn.setOnClickListener(this::onClickReset);
+
         toastSwitch.setChecked(Settings.getTOAST(this));
         timeoutNumberBox.setText(String.valueOf(Settings.getTIMEOUT(this)));
         portNumberBox.setText(String.valueOf(Settings.getPORT(this)));
@@ -37,7 +44,7 @@ public class MainActivity extends Activity {
         ServerAddress.setText(String.format(Locale.US, "%s:%d", Utility.getIPAddress(), Settings.getPORT(this)));
     }
 
-    public void onReset(View view) {
+    public void onClickReset(View view) {
         Context context = view.getContext();
         Settings.reset(context);
         SingleTapWidget.reloadSettings(context);
