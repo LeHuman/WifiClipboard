@@ -16,10 +16,30 @@ I thought that this method of just sending a string to my phone would be faster 
 
 Place the widget associated with this app on your homescreen.
 
-Next, use the included python script / executable to send data from a locally connected device to this app.
+Next, use the included python script / executable to send data from a locally connected device to this app. Make sure you have copied the text you want to send.
 
 Any received text will then be place on your device's clipboard.
 
 Tap the icon twice to cancel.
 
+## Notes
+
 When the widget is enabled, the device sending the string only really needs to connect to the address listed in the app and send a string over the appropriate TCP port.
+
+My current implementation in python is a bit brute forced as it attempts to connect with nearly every host available.
+
+Security was not a concern as this probably shouldn't be used publicly.Regardless, encrypting the string being sent might help with this.
+
+## Compatibility
+
+Android app is built for SDK 21+, but only tested on 30
+
+Python script / executable has only really been tested on Win10. However, I believe implementing the sender is easier than the receiver.
+
+Sender does not necessarily have to be another computer or phone.
+
+## Improvements
+
+Originally this app was going to use bluetooth, however, I rarely use bluetooth, but I am almost always connected to Wi-fi.
+
+Find a way so that the clipboard is constantly in sync. One issue, however, is whether this is actually worth the background process.
