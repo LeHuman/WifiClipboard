@@ -283,7 +283,9 @@ public class SingleTapWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(Context context) { // TODO: Fix slow start on reboot
         newWidgetView(context);
+        updateWidgets(context);
+        setIconState(context, IconState.ERROR);
     }
 }
