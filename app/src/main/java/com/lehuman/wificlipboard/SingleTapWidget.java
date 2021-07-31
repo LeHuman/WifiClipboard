@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -24,22 +25,25 @@ public class SingleTapWidget extends AppWidgetProvider {
     public static int TCP_TIMEOUT = Settings.TCP_DEFAULT_TIMEOUT;
     public static boolean TCP_ENABLE_TOAST = Settings.TCP_DEFAULT_TOAST;
 
-    public static void reloadSettings(Context context) {
+    private static Handler delayedIntent;
+    private static TCPServer server;
+    private static RemoteViews mWidgetView;
+    private static int status = -1;
+    private static int count = 0;
+
+    public static void loadSettings(Context context) {
         TCP_PORT = Settings.getPORT(context);
         TCP_TIMEOUT = Settings.getTIMEOUT(context);
         TCP_ENABLE_TOAST = Settings.getTOAST(context);
+    }
+
+    public static void updateSettings(Context context) {
         updateWidgets(context);
         if (server != null) {
             server.stop();
         }
         newServer(context);
     }
-
-    private static Handler delayedIntent;
-    private static TCPServer server;
-    private static RemoteViews mWidgetView;
-    private static int status = -1;
-    private static int count = 0;
 
     public enum IconState {
         READY,
@@ -239,20 +243,28 @@ public class SingleTapWidget extends AppWidgetProvider {
         }
     }
 
+    private static void newWidgetView(Context context) {
+        Intent intent = new Intent(context, SingleTapWidget.class);
+        intent.setAction(TCP_RECEIVE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        mWidgetView = new RemoteViews(context.getPackageName(), R.layout.single_tap_widget_layout);
+        mWidgetView.setOnClickPendingIntent(R.id.mainIcon, pendingIntent);
+        mWidgetView.setImageViewResource(R.id.mainIcon, R.drawable.round_content_copy_24);
+        mWidgetView.setImageViewResource(R.id.ConnectionStandby, R.drawable.ic_round_wifi_24_mod); // TODO: find way to change tint instead
+        mWidgetView.setImageViewResource(R.id.ConnectionReady, R.drawable.ic_round_wifi_24_mod);
+        mWidgetView.setImageViewResource(R.id.ConnectionWaiting, R.drawable.ic_round_wifi_24_mod);
+        mWidgetView.setImageViewResource(R.id.ConnectionError, R.drawable.ic_round_wifi_24_mod);
+
+        loadSettings(context);
+        if (server == null) {
+            newServer(context);
+        }
+    }
+
     private static RemoteViews getWidgetView(Context context) {
         if (mWidgetView == null) {
-            reloadSettings(context);
-            Intent intent = new Intent(context, SingleTapWidget.class);
-            intent.setAction(TCP_RECEIVE);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-            mWidgetView = new RemoteViews(context.getPackageName(), R.layout.single_tap_widget_layout);
-            mWidgetView.setOnClickPendingIntent(R.id.mainIcon, pendingIntent);
-            mWidgetView.setImageViewResource(R.id.mainIcon, R.drawable.round_content_copy_24);
-            mWidgetView.setImageViewResource(R.id.ConnectionStandby, R.drawable.ic_round_wifi_24_mod); // TODO: find way to change tint instead
-            mWidgetView.setImageViewResource(R.id.ConnectionReady, R.drawable.ic_round_wifi_24_mod);
-            mWidgetView.setImageViewResource(R.id.ConnectionWaiting, R.drawable.ic_round_wifi_24_mod);
-            mWidgetView.setImageViewResource(R.id.ConnectionError, R.drawable.ic_round_wifi_24_mod);
+            newWidgetView(context);
         }
         return mWidgetView;
     }
@@ -265,8 +277,13 @@ public class SingleTapWidget extends AppWidgetProvider {
     }
 
     @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        loadSettings(context);
+        updateSettings(context);
+    }
+
+    @Override
     public void onEnabled(Context context) {
-        super.onEnabled(context);
-        reloadSettings(context);
+        newWidgetView(context);
     }
 }

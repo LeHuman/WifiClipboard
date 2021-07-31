@@ -47,7 +47,8 @@ public class MainActivity extends Activity {
     public void onClickReset(View view) {
         Context context = view.getContext();
         Settings.reset(context);
-        SingleTapWidget.reloadSettings(context);
+        SingleTapWidget.loadSettings(context);
+        SingleTapWidget.updateSettings(context);
         toastSwitch.setChecked(Settings.getTOAST(context));
         timeoutNumberBox.setText(String.valueOf(Settings.getTIMEOUT(context)));
         portNumberBox.setText(String.valueOf(Settings.getPORT(context)));
@@ -73,7 +74,8 @@ public class MainActivity extends Activity {
             return;
         }
 
-        SingleTapWidget.reloadSettings(context);
+        SingleTapWidget.loadSettings(context);
+        SingleTapWidget.updateSettings(context);
         updateIP();
         Toast.makeText(context, "Settings updated", Toast.LENGTH_SHORT).show();
     }
