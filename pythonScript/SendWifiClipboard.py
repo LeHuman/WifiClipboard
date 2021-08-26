@@ -67,7 +67,7 @@ def sendMsg(HOST_IP):
             print("Sent", HOST_IP + ":" + str(PORT))
             client.send(str(msg if msg else input("Give input:")).encode(FORMAT))
             client.close()
-            exit()
+            sys.exit(0)
         else:
             client.close()
     except ConnectionRefusedError:
