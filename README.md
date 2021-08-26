@@ -32,7 +32,7 @@ Linux needs [net-tools](https://wiki.linuxfoundation.org/networking/net-tools) t
 
 If using the python script, [python3](https://www.python.org/) is needed along with the module [pyperclip](https://pypi.org/project/pyperclip/) or [tkinter](https://docs.python.org/3/library/tkinter.html)
 
-Android device with SDK 21+.
+Android device with SDK 23+.
 
 Local network for everything to connect through.
 
