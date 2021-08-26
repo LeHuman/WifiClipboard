@@ -14,4 +14,5 @@
     <string name="enable_toasts">Enable toast notifications</string>
     <string name="port">Port</string>
     <string name="app_icon">App Icon</string>
+    <string name="placeholder_ip">xxx.xxx.xxx.xxx:xxxx</string>
 </resources>

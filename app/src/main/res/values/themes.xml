@@ -12,8 +12,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:moreIcon">@drawable/ic_launcher_vector_b</item>
         <item name="android:textColorSecondary">#1C1C1C</item>
-<!--        <item name="android:background">#000000</item>-->
+        <item name="android:textColorHint">#505050</item>
+        <item name="android:textColorSecondaryInverse">@color/white</item>
     </style>
 
 </resources>
