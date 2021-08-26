@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WifiClipboard">
 
-        <activity android:name="com.lehuman.wificlipboard.MainActivity">
+        <activity android:name="com.lehuman.wificlipboard.MainActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,8 @@
         </activity>
         <receiver
             android:name="com.lehuman.wificlipboard.SingleTapWidget"
-            android:label="WifiClipboard">
+            android:label="WifiClipboard"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.lehuman.wificlipboard.TCP_RECEIVE" />

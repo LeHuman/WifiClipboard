@@ -92,17 +92,6 @@ public class TCPServer {
         this.listener = listener;
     }
 
-//    public String waitForResponse() {
-//        while (response == null) {
-//            try {
-//                Thread.sleep(1);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return response;
-//    }
-
     public String getResponse() {
         return response;
     }

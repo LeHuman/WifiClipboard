@@ -246,7 +246,7 @@ public class SingleTapWidget extends AppWidgetProvider {
     private static void newWidgetView(Context context) {
         Intent intent = new Intent(context, SingleTapWidget.class);
         intent.setAction(TCP_RECEIVE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         mWidgetView = new RemoteViews(context.getPackageName(), R.layout.single_tap_widget_layout);
         mWidgetView.setOnClickPendingIntent(R.id.mainIcon, pendingIntent);
