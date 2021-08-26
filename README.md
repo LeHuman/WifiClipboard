@@ -46,7 +46,7 @@ Security was not a concern as this probably shouldn't be used publicly.Regardles
 
 ## Compatibility
 
-Android app is built for SDK 21+, but only tested on 30
+Android app is built for SDK 23+, but only tested on 30
 
 Python script / executable has only really been tested on Win10. However, I believe implementing the sender is easier than the receiver.
 
