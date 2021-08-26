@@ -1,17 +1,26 @@
 import os
-import socket
-import multiprocessing
-import subprocess
-import os
 import re
+import sys
+import time
 import socket
 import threading
-import threading
-import time
-import sys
+import subprocess
+import multiprocessing
 
 FORMAT = "utf-8"
 PORT = 55051
+
+def getLocalIPFormat():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        sName = s.getsockname()[0]
+        s.close()
+        return re.search("\\d+\\.\\d+\\.\\d+\\.", sName)[0] + "%i"
+    except:
+        print("Failed to get local ip")
+        return "192.168.1.%i"
+
 
 msg = ""
 
@@ -41,12 +50,12 @@ except:
     print("Failed to read from Clipboard")
     sys.exit(0)
 
-Done = 0
+Connected = False
 threads = []
 
 # Attempt to connect to the give IP
 def sendMsg(HOST_IP):
-    global Done
+    global Connected
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.settimeout(1)  # at this point, server should be on already
@@ -54,10 +63,11 @@ def sendMsg(HOST_IP):
         response = client.recv(2048).decode(FORMAT)
         # We expect this exact response, otherwise this connection may have been a coincidence
         if response == "Wi-fi Clipboard Connected":
+            Connected = True
             print("Sent", HOST_IP + ":" + str(PORT))
             client.send(str(msg if msg else input("Give input:")).encode(FORMAT))
             client.close()
-            Done = len(threads)
+            exit()
         else:
             client.close()
     except ConnectionRefusedError:
@@ -66,8 +76,6 @@ def sendMsg(HOST_IP):
         pass
     except OSError:
         pass
-    Done += 1
-
 
 devices = ""
 
@@ -85,5 +93,10 @@ for device in devices:
 for thread in threads:
     thread.start()
 
-while Done < len(threads):
-    pass
+BASE_IP = getLocalIPFormat()
+
+for i in range(255):
+    ip = BASE_IP%i
+    if ip not in devices:
+        thread = threading.Thread(target=sendMsg, args=(ip,))
+        thread.start()
