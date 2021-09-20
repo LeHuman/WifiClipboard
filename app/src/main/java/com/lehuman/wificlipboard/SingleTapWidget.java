@@ -182,7 +182,7 @@ public class SingleTapWidget extends AppWidgetProvider {
             case -1:
                 showToast(context, "Timeout / Disconnected");
                 statusCoordinator.setColor(context, ERROR);
-                statusCoordinator.blink(context, ERROR, HIDDEN, 50, 4);
+                statusCoordinator.blink(context, ERROR, HIDDEN, 50, 3);
                 break;
             default:
                 showToast(context, "Response copied to clipboard");
@@ -276,6 +276,10 @@ public class SingleTapWidget extends AppWidgetProvider {
         if (server == null) {
             newServer(context);
         }
+
+        if (!statusCoordinator.isAlive())
+            statusCoordinator.start();
+        statusCoordinator.setColor(context, STANDBY);
     }
 
     private static RemoteViews getWidgetView(Context context) {
