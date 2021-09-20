@@ -14,6 +14,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.annotation.IntDef;
+import androidx.core.content.ContextCompat;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -259,17 +260,23 @@ public class SingleTapWidget extends AppWidgetProvider {
     private static void newWidgetView(Context context) {
         Intent intent = new Intent(context, SingleTapWidget.class);
         intent.setAction(TCP_RECEIVE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, flags);
 
         mWidgetView = new RemoteViews(context.getPackageName(), R.layout.single_tap_widget_layout);
         mWidgetView.setOnClickPendingIntent(R.id.mainIcon, pendingIntent);
         mWidgetView.setImageViewResource(R.id.mainIcon, R.drawable.round_content_copy_24);
         mWidgetView.setImageViewResource(R.id.ConnectionStatus, R.drawable.ic_round_wifi_24_mod);
 
-        colors[READY] = context.getColor(R.color.green);
-        colors[ERROR] = context.getColor(R.color.red);
-        colors[WAITING] = context.getColor(R.color.yellow);
-        colors[STANDBY] = context.getColor(R.color.blue);
+        colors[READY] = ContextCompat.getColor(context, R.color.green);
+        colors[ERROR] = ContextCompat.getColor(context, R.color.red);
+        colors[WAITING] = ContextCompat.getColor(context, R.color.yellow);
+        colors[STANDBY] = ContextCompat.getColor(context, R.color.blue);
         colors[HIDDEN] = Color.TRANSPARENT;
 
         loadSettings(context);

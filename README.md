@@ -32,7 +32,7 @@ Linux needs [net-tools](https://wiki.linuxfoundation.org/networking/net-tools) t
 
 If using the python script, [python3](https://www.python.org/) is needed along with the module [pyperclip](https://pypi.org/project/pyperclip/) or [tkinter](https://docs.python.org/3/library/tkinter.html)
 
-Android device with SDK 23+.
+Android device with SDK 17+.
 
 Local network for everything to connect through.
 
@@ -46,7 +46,7 @@ Security was not a concern as this probably shouldn't be used publicly.Regardles
 
 ## Compatibility
 
-Android app is built for SDK 23+, but only tested on 30
+Android app is built to support SDK 17+, but only tested on 30
 
 Python script / executable has only really been tested on Win10. However, I believe implementing the sender is easier than the receiver.
 
