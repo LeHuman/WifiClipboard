@@ -1,16 +1,24 @@
 import os
 import re
 import sys
-import time
 import socket
-import threading
-import subprocess
-import multiprocessing
+from multiprocessing import Process
+import signal
+import platform
+from time import sleep
 
-FORMAT = "utf-8"
-PORT = 55051
+MSG_FORMAT = "utf-8"
+DEFAULT_PORT = 55051
 
-def getLocalIPFormat():
+
+def stopScript(PID):
+    if platform.system() != "Windows":
+        os.killpg(PID, signal.SIGKILL)
+    else:
+        os.kill(PID, signal.SIGTERM)
+
+
+def getLocalIPFormat() -> str:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
@@ -18,55 +26,56 @@ def getLocalIPFormat():
         s.close()
         return re.search("\\d+\\.\\d+\\.\\d+\\.", sName)[0] + "%i"
     except:
-        print("Failed to get local ip")
+        print("Using default ipv4 format")
         return "192.168.1.%i"
 
 
-msg = ""
+def getPort() -> int:
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        try:
+            _PORT = int(arg)
+            if _PORT > 65535 or _PORT < 0:
+                raise OverflowError
+            return _PORT
+        except:
+            print("Bad argument")
+    return DEFAULT_PORT
 
-if len(sys.argv) > 1:
-    arg = sys.argv[1]
+
+def getMessage() -> str:
+    msg: str = None
     try:
-        _PORT = int(arg)
-        if _PORT > 65535 or _PORT < 0:
-            raise OverflowError
-        PORT = _PORT
+        import pyperclip  # default to faster, but required install
+
+        msg = pyperclip.paste()
+
+        if not msg:
+            raise ValueError
+    except ModuleNotFoundError:
+        # tkinter comes with python on Windows by default, and is common
+        from tkinter import Tk
+
+        msg = Tk().clipboard_get()  # tkinter has clipboard option builtin
     except:
-        print("Bad argument")
+        print("Failed to read from Clipboard")
+        sys.exit(0)
+    return msg
 
-try:
-    import pyperclip  # default to faster, but required install
-
-    msg = pyperclip.paste()
-
-    if not msg:
-        raise ValueError
-except ModuleNotFoundError:
-    # tkinter comes with python on Windows by default, and is common
-    from tkinter import Tk
-
-    msg = Tk().clipboard_get()  # tkinter has clipboard option builtin
-except:
-    print("Failed to read from Clipboard")
-    sys.exit(0)
-
-Connected = False
-threads = []
 
 # Attempt to connect to the give IP
-def sendMsg(HOST_IP):
-    global Connected
+def sendMsg(HOST_IP, msg, PORT, PID):
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.settimeout(1)  # at this point, server should be on already
         client.connect((HOST_IP, PORT))
-        response = client.recv(2048).decode(FORMAT)
+        response = client.recv(2048).decode(MSG_FORMAT)
         # We expect this exact response, otherwise this connection may have been a coincidence
         if response == "Wi-fi Clipboard Connected":
-            Connected = True
             print("Sent", HOST_IP + ":" + str(PORT))
-            client.send(str(msg if msg else input("Give input:")).encode(FORMAT))
+            client.send(str(msg if msg else input("Give input:")).encode(MSG_FORMAT))
             client.close()
+            stopScript(PID)
             sys.exit(0)
         else:
             client.close()
@@ -77,26 +86,37 @@ def sendMsg(HOST_IP):
     except OSError:
         pass
 
-devices = ""
 
-for device in os.popen("arp -a"):
-    devices += device
+if __name__ == "__main__":
 
-# TODO: Be smarter about which IPs we check in the first place
-devices = re.findall("^\\W+([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+).*$", devices, re.MULTILINE)
+    msg = getMessage()
+    devices = ""
 
-# Attempt to connect to every avaliable host using the specific port
-for device in devices:
-    thread = threading.Thread(target=sendMsg, args=(device,))
-    threads.append(thread)
+    PORT = getPort()
+    PID = os.getpid() if platform.system() == "Windows" else os.getpgid(os.getpid())
 
-for thread in threads:
-    thread.start()
+    for device in os.popen("arp -a"):
+        devices += device
 
-BASE_IP = getLocalIPFormat()
+    # IMPROVE: Be smarter about which IPs we check in the first place
+    devices = re.findall("^\\W+([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+).*$", devices, re.MULTILINE)
 
-for i in range(255):
-    ip = BASE_IP%i
-    if ip not in devices:
-        thread = threading.Thread(target=sendMsg, args=(ip,))
+    threads: list[Process] = []
+
+    # Attempt to connect to every avaliable host using the specific port
+    for device in devices:
+        thread = Process(target=sendMsg, args=(device, msg, PORT, PID))
+        threads.append(thread)
+
+    for thread in threads:
+        thread.start()
+        sleep(0.05)
+
+    BASE_IP = getLocalIPFormat()
+
+    print("Scanning all local addresses")
+
+    for i in range(255):
+        ip = BASE_IP % i
+        thread = Process(target=sendMsg, args=(ip, msg, PORT, PID))
         thread.start()
