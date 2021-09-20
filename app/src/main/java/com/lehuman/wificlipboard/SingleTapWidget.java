@@ -91,7 +91,7 @@ public class SingleTapWidget extends AppWidgetProvider {
             synchronized (lock) {
                 while (run) {
                     int lastColor = -1;
-                    Context context = null;
+                    Context context;
                     try {
                         if (nextStatus == null)
                             lock.wait();
@@ -105,11 +105,12 @@ public class SingleTapWidget extends AppWidgetProvider {
                             updateWidgets(context);
                         } while ((nextStatus = nextStatus.nextStatus) != null);
                     } catch (InterruptedException ignored) {
+                        context = null;
                     } finally {
                         running.set(false);
                     }
                     if (context != null && (lastColor == ERROR || lastColor == READY))
-                        setColor(context, STANDBY, 1000);
+                        setColor(context, STANDBY, 700);
                 }
             }
         }
