@@ -2,7 +2,7 @@ import os
 import re
 import sys
 import socket
-from multiprocessing import Process
+from multiprocessing import Process, freeze_support
 import signal
 import platform
 from time import sleep
@@ -88,6 +88,7 @@ def sendMsg(HOST_IP, msg, PORT, PID):
 
 
 if __name__ == "__main__":
+    freeze_support()
 
     msg = getMessage()
     devices = ""
