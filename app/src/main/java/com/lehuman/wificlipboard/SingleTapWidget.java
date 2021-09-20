@@ -84,11 +84,12 @@ public class SingleTapWidget extends AppWidgetProvider {
         private static final AtomicBoolean running = new AtomicBoolean();
         private static final Object lock = new Object();
         private Status nextStatus;
+        private boolean run = true;
 
         @Override
         public void run() {
             synchronized (lock) {
-                while (true) {
+                while (run) {
                     int lastColor = -1;
                     Context context = null;
                     try {
@@ -111,6 +112,19 @@ public class SingleTapWidget extends AppWidgetProvider {
                         setColor(context, STANDBY, 1000);
                 }
             }
+        }
+
+        @Override
+        public synchronized void start() {
+            run = true;
+            nextStatus = null;
+            running.set(false);
+            super.start();
+        }
+
+        public void kill() {
+            run = false;
+            interrupt();
         }
 
         public void update() {
@@ -296,4 +310,10 @@ public class SingleTapWidget extends AppWidgetProvider {
         updateWidgets(context);
         statusCoordinator.setColor(context, ERROR);
     }
+
+    @Override
+    public void onDisabled(Context context) {
+        statusCoordinator.kill();
+    }
+
 }
