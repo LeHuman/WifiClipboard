@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,41 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/main_icon"
-        android:tint="#FFFFFF" />
+        app:srcCompat="@drawable/round_content_copy_24" />
 
     <ImageView
-        android:id="@+id/ConnectionStandby"
+        android:id="@+id/ConnectionStatus"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="false"
         android:contentDescription="@string/connection_status"
-        android:tint="#2196F3" />
-
-    <ImageView
-        android:id="@+id/ConnectionReady"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:contentDescription="@string/connection_status"
-        android:tint="#4CAF50"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/ConnectionWaiting"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:contentDescription="@string/connection_status"
-        android:tint="#FFEB3B"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/ConnectionError"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:contentDescription="@string/connection_status"
-        android:tint="#F44336"
-        android:visibility="invisible" />
+        app:srcCompat="@drawable/ic_round_wifi_24_mod" />
 
 </RelativeLayout>
