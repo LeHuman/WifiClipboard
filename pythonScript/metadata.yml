@@ -1,0 +1,9 @@
+# create-version-file metadata.yml
+
+Version: 1.0.1.1
+CompanyName:
+FileDescription: Wifi Clipboard Sender
+InternalName: SendWifiClipboard
+LegalCopyright: LeHuman
+OriginalFilename: SendWifiClipboard.exe
+ProductName: WifiClipboard
