@@ -37,6 +37,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:contentDescription="@string/app_icon"
+            android:src="?android:attr/moreIcon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/Title"
             app:layout_constraintTop_toTopOf="parent"
