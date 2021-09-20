@@ -73,6 +73,7 @@ def sendMsg(HOST_IP, msg, PORT, PID):
         # We expect this exact response, otherwise this connection may have been a coincidence
         if response == "Wi-fi Clipboard Connected":
             print("Sent", HOST_IP + ":" + str(PORT))
+            sleep(0.1)
             client.send(str(msg if msg else input("Give input:")).encode(MSG_FORMAT))
             client.close()
             stopScript(PID)
@@ -111,9 +112,11 @@ if __name__ == "__main__":
 
     for thread in threads:
         thread.start()
-        sleep(0.05)
+        sleep(0.1)
 
     BASE_IP = getLocalIPFormat()
+
+    sleep(1)
 
     print("Scanning all local addresses")
 

@@ -1,6 +1,6 @@
 # create-version-file metadata.yml
 
-Version: 1.0.1.1
+Version: 1.0.1.2
 CompanyName:
 FileDescription: Wifi Clipboard Sender
 InternalName: SendWifiClipboard
